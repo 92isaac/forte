@@ -31,7 +31,11 @@ class SingleImage(BaseModel):
 
     @property
     def single_image_url(self):
-        return f"https://res.cloudinary.com/dpoix2ilz/{self.image}"
+        return f"https://res.cloudinary.com/dpoix2ilz/image/upload/{self.image}"
+    
+
+    def __str__(self):
+        return self.single_image_url
     
 
 class MultipleImage(BaseModel):
@@ -41,7 +45,11 @@ class MultipleImage(BaseModel):
 
     @property
     def image_url(self):
-        return f"https://res.cloudinary.com/dpoix2ilz/{self.multimage}"
+        return f"https://res.cloudinary.com/dpoix2ilz/image/upload/{self.multimage}"
+    
+
+    def __str__(self):
+        return self.image_url
     
 
 class ProPertyDescriptions(BaseModel):
@@ -50,6 +58,9 @@ class ProPertyDescriptions(BaseModel):
 
 class ProPertyImages(BaseModel):
     gallery = models.ForeignKey(MultipleImage, blank=True, on_delete=models.CASCADE, null=True, related_name='property_images')
+
+    # def __str__(self):
+    #     return self.gallery
 
 
 
@@ -62,6 +73,17 @@ class Property(BaseModel):
     number_of_rooms = models.PositiveIntegerField()
     number_of_bath = models.PositiveIntegerField()
     property_size = models.DecimalField(max_digits=10, decimal_places=2)
+    single_image = models.ForeignKey(SingleImage, on_delete=models.SET_NULL, null=True)
+    property_images = models.JSONField(default=list)  # Store the images as JSON here
+
+    def add_property_image(self, property_image_instance):
+        # Method to add a related ProPertyImages instance to the property_images JSONField
+        property_image_data = {
+            "gallery_id": property_image_instance.gallery.id,
+            # Add any other relevant ProPertyImages data you want to store
+        }
+        self.property_images.append(property_image_data)
+        self.save()
 
 
 

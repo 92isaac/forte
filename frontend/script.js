@@ -5,10 +5,11 @@ let input_noofroom = document.getElementById('noofroom');
 let input_noofbath = document.getElementById('noofbath');
 let input_property = document.getElementById('property');
 let input_img = document.getElementById('img');
+let input_single_img = document.getElementById('single_img');
 let input_price = document.getElementById('price');
 let input_boydesc = document.getElementById('boydesc');
 let form = document.getElementById('myForm');
-let url = "http://127.0.0.1:8000/property/";  
+let url = "http://127.0.0.1:9000/v1/api/properties/";  
 
 form.addEventListener('submit', (e)=>{
 
@@ -16,13 +17,14 @@ form.addEventListener('submit', (e)=>{
 var data = {
     title: input_title.value,
     location: input_location.value,
-    description:input_description.value,
+    // description:input_description.value,
     price:input_price.value,
     number_of_rooms: input_noofroom.value,
     number_of_bath: input_noofbath.value,
     boys_quarters_descriptions:input_boydesc.value,
     property_size:input_property.value,
-    uploaded_images:input_img.value
+    property_images:input_img.value,
+    single_image:input_single_img.value
 };
 
 // Set up the request options
@@ -76,7 +78,8 @@ fetch(url)
     data.forEach(element => {
       html+=`<div>
       <h1>${element?.id}</h1>
-      <img src='${element?.img}' width='100'>
+      <img src='${element?.property_images[0]}' width='100'>
+      <img src='${element?.property_images[1]}' width='100'>
       </div>`
     });
 // console.log(html)
