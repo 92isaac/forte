@@ -87,6 +87,17 @@ class Property(BaseModel):
 
 
 
+        # Create a ProPertyImages instance
+        property_image_instance = ProPertyImages.objects.create(gallery=property_images)
+
+# Add the related ProPertyImages instance to the Property's property_images field
+        property_images .add_property_image(property_image_instance)
+
+# To retrieve the related ProPertyImages associated with a Property instance
+        property_images = property_instance.property_images
+
+
+
 
     def __str__(self):
         return self.title
